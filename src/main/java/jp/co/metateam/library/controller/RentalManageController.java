@@ -18,6 +18,7 @@ import jp.co.metateam.library.constants.Constants;
 import jp.co.metateam.library.model.Account;
 import jp.co.metateam.library.model.RentalDto;
 import jp.co.metateam.library.model.RentalManage;
+import jp.co.metateam.library.model.RentalManageListDto;
 import jp.co.metateam.library.model.Stock;
 import jp.co.metateam.library.service.AccountService;
 import jp.co.metateam.library.service.RentalService;
@@ -42,9 +43,20 @@ public class RentalManageController {
         this.rentalService = rentalService;
     }
 
+    /**
+     * 貸出一覧画面表示
+     */
     @GetMapping("/rental/index")
     public String index(Model model) {
-        return "/rental/index";
+
+        // 貸出一覧画面に表示する情報を取得
+        List<RentalManageListDto> rentalManageList = rentalService.findRentalManageList();
+
+        // HTMLで使用できるようModelへ格納
+        model.addAttribute("rentalManageList", rentalManageList);
+
+        // 貸出一覧画面表示
+        return "rental/index";
     }
 
     @GetMapping("/rental/add")
