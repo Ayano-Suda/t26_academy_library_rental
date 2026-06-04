@@ -24,7 +24,7 @@ public class StockService {
     private final StockRepository stockRepository;
 
     @Autowired
-    public StockService(BookMstRepository bookMstRepository, StockRepository stockRepository){
+    public StockService(BookMstRepository bookMstRepository, StockRepository stockRepository) {
         this.bookMstRepository = bookMstRepository;
         this.stockRepository = stockRepository;
     }
@@ -35,10 +35,10 @@ public class StockService {
 
         return stocks;
     }
-    
+
     @Transactional
-    public List <Stock> findStockAvailableAll() {
-        List <Stock> stocks = this.stockRepository.findByDeletedAtIsNullAndStatus(Constants.STOCK_AVAILABLE);
+    public List<Stock> findStockAvailableAll() {
+        List<Stock> stocks = this.stockRepository.findByDeletedAtIsNullAndStatus(Constants.STOCK_AVAILABLE);
 
         return stocks;
     }
@@ -48,7 +48,7 @@ public class StockService {
         return this.stockRepository.findById(id).orElse(null);
     }
 
-    @Transactional 
+    @Transactional
     public void save(StockDto stockDto) throws Exception {
         try {
             Stock stock = new Stock();
@@ -69,7 +69,7 @@ public class StockService {
         }
     }
 
-    @Transactional 
+    @Transactional
     public void update(String id, StockDto stockDto) throws Exception {
         try {
             Stock stock = findById(id);
@@ -93,4 +93,24 @@ public class StockService {
             throw e;
         }
     }
+
+    /**
+     * 在庫ステータス取得
+     * stockIdを元にSTOCKテーブルから在庫情報を取得する
+     */
+    @Transactional
+    public Integer getStockStatus(String stockId) {
+
+        // STOCKテーブルから在庫情報を取得
+        Stock stock = this.stockRepository.findById(stockId).orElse(null);
+
+        // 在庫情報が存在しない場合
+        if (stock == null) {
+            return null;
+        }
+
+        // 在庫ステータスを返却
+        return stock.getStatus();
+    }
+
 }
